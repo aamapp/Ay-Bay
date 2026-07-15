@@ -447,7 +447,7 @@ export const Reports: React.FC = () => {
           } else {
             const defaults = [
               {
-                id: `wallet-cash-${user.id}`,
+                id: user.id,
                 name: "ক্যাশ",
                 balance: 0,
                 isDefault: true,
@@ -477,7 +477,7 @@ export const Reports: React.FC = () => {
         } else {
           const defaults = [
             {
-              id: `wallet-cash-${user.id}`,
+              id: user.id,
               name: "ক্যাশ",
               balance: 0,
               isDefault: true,

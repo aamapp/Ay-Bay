@@ -1175,7 +1175,7 @@ export const Expenses: React.FC = () => {
       if (currentWallets.length === 0) {
         currentWallets = [
           {
-            id: `wallet-cash-${user.id}`,
+            id: user.id,
             name: "ক্যাশ",
             balance: 0,
             isDefault: true,
@@ -1225,8 +1225,8 @@ export const Expenses: React.FC = () => {
       } else {
         const walletId =
           walletName === "ক্যাশ"
-            ? `wallet-cash-${user.id}`
-            : `wallet-${Date.now()}-${user.id}`;
+            ? user.id
+            : crypto.randomUUID();
         const newWallet = {
           id: walletId,
           name: walletName,

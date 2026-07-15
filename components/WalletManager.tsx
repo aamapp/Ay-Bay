@@ -60,6 +60,23 @@ const parseExpenseNotes = (fullNotes: string): { notes: string; wallet: string; 
   };
 };
 
+const generateUUID = (): string => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
+const isUUID = (str: string): boolean => {
+  if (!str) return false;
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(str.trim());
+};
+
 const dropdownVariants = {
   hidden: {
     scaleY: 0,
@@ -226,7 +243,7 @@ export const WalletManager: React.FC = () => {
   const getDefaultWallets = (userId: string): Wallet[] => {
     return [
       {
-        id: `wallet-cash-${userId}`,
+        id: userId,
         name: 'ক্যাশ',
         balance: 0,
         isDefault: true,
@@ -303,10 +320,10 @@ export const WalletManager: React.FC = () => {
           // Keep other wallets, and ensure 'ক্যাশ' exists with 0 balance
           processedData = data.filter(w => !dummyIds.includes(w.id) && !dummyNames.includes(w.name) && !isIdLikeWalletName(w.name));
           
-          const cashWallet = processedData.find(w => w.name === 'ক্যাশ' || w.id === `wallet-cash-${user.id}`);
+          const cashWallet = processedData.find(w => w.name === 'ক্যাশ' || w.id === user.id || w.id === `wallet-cash-${user.id}`);
           if (!cashWallet) {
             processedData.push({
-              id: `wallet-cash-${user.id}`,
+              id: user.id,
               name: 'ক্যাশ',
               balance: 0,
               isDefault: true,
@@ -314,9 +331,12 @@ export const WalletManager: React.FC = () => {
               userid: user.id,
               createdAt: new Date().toISOString()
             });
-          } else if (cashWallet.balance === 9005) {
-            cashWallet.balance = 0;
-            cashWallet.lastTransactionDate = 'নতুন ওয়ালেট';
+          } else {
+            cashWallet.id = user.id;
+            if (cashWallet.balance === 9005) {
+              cashWallet.balance = 0;
+              cashWallet.lastTransactionDate = 'নতুন ওয়ালেট';
+            }
           }
 
           // Trigger background clean up
@@ -327,11 +347,23 @@ export const WalletManager: React.FC = () => {
             if (deleteIds.length > 0) {
               await supabase.from('wallets').delete().in('id', deleteIds);
             }
-            await supabase.from('wallets').upsert(processedData);
           } catch (dbErr) {
             console.warn("Error deleting mock rows from DB:", dbErr);
           }
         }
+
+        // Migrate any invalid UUIDs in fetched data
+        let migrated = false;
+        processedData = processedData.map(w => {
+          if (!isUUID(w.id)) {
+            migrated = true;
+            return {
+              ...w,
+              id: w.name === 'ক্যাশ' ? user.id : generateUUID()
+            };
+          }
+          return w;
+        });
 
         // Sort: default wallets first, then by name
         const sortedData = [...processedData].sort((a, b) => {
@@ -343,6 +375,14 @@ export const WalletManager: React.FC = () => {
         setWallets(sortedData);
         setIsDbAvailable(true);
         localStorage.setItem(`manage_me_wallets_${user.id}`, JSON.stringify(sortedData));
+
+        if (migrated) {
+          try {
+            await supabase.from('wallets').upsert(sortedData);
+          } catch (syncErr) {
+            console.warn("Error syncing migrated fetched data:", syncErr);
+          }
+        }
       } else {
         // No DB records, seed one standard default 'ক্যাশ' wallet
         const defaults = getDefaultWallets(user.id);
@@ -387,12 +427,13 @@ export const WalletManager: React.FC = () => {
         const hasDummies = parsed.some((w: any) => dummyIds.includes(w.id) || dummyNames.includes(w.name));
         const hasLegacyCashBalance = parsed.some((w: any) => w.name === 'ক্যাশ' && w.balance === 9005);
 
+        let processed = parsed;
         if (hasDummies || hasLegacyCashBalance) {
-          const processed = parsed.filter((w: any) => !dummyIds.includes(w.id) && !dummyNames.includes(w.name));
-          const cashWallet = processed.find((w: any) => w.name === 'ক্যাশ' || w.id === `wallet-cash-${user.id}`);
+          processed = parsed.filter((w: any) => !dummyIds.includes(w.id) && !dummyNames.includes(w.name));
+          const cashWallet = processed.find((w: any) => w.name === 'ক্যাশ' || w.id === user.id || w.id === `wallet-cash-${user.id}`);
           if (!cashWallet) {
             processed.push({
-              id: `wallet-cash-${user.id}`,
+              id: user.id,
               name: 'ক্যাশ',
               balance: 0,
               isDefault: true,
@@ -400,14 +441,39 @@ export const WalletManager: React.FC = () => {
               userid: user.id,
               createdAt: new Date().toISOString()
             });
-          } else if (cashWallet.balance === 9005) {
-            cashWallet.balance = 0;
-            cashWallet.lastTransactionDate = 'নতুন ওয়ালেট';
+          } else {
+            cashWallet.id = user.id;
+            if (cashWallet.balance === 9005) {
+              cashWallet.balance = 0;
+              cashWallet.lastTransactionDate = 'নতুন ওয়ালেট';
+            }
           }
-          setWallets(processed);
-          localStorage.setItem(`manage_me_wallets_${user.id}`, JSON.stringify(processed));
-        } else {
-          setWallets(parsed);
+        }
+
+        // Migrate all wallets to valid UUIDs
+        let migrated = false;
+        const migratedWallets = processed.map((w: any) => {
+          if (!isUUID(w.id)) {
+            migrated = true;
+            return {
+              ...w,
+              id: w.name === 'ক্যাশ' ? user.id : generateUUID()
+            };
+          }
+          return w;
+        });
+
+        setWallets(migratedWallets);
+        localStorage.setItem(`manage_me_wallets_${user.id}`, JSON.stringify(migratedWallets));
+
+        if (migrated && isDbAvailable) {
+          (async () => {
+            try {
+              await supabase.from('wallets').upsert(migratedWallets);
+            } catch (err) {
+              console.warn("Could not sync migrated wallets on fallback:", err);
+            }
+          })();
         }
       } catch (e) {
         const defaults = getDefaultWallets(user.id);
@@ -828,7 +894,7 @@ export const WalletManager: React.FC = () => {
     } else {
       // Add Mode: Balance is initialized to 0
       const isNowDefault = wallets.length === 0; // First wallet is default by default
-      const newId = `wallet-${Math.random().toString(36).substring(2, 10)}-${Date.now()}`;
+      const newId = generateUUID();
       const newWallet: Wallet = {
         id: newId,
         name: formData.name.trim(),
