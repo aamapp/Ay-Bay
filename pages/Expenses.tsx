@@ -162,7 +162,7 @@ const CustomCoinsIcon = ({
 
 const CustomReceiptIcon = ({
   size = 20,
-  strokeWidth = 1.5,
+  strokeWidth = 1.15,
   className = "",
 }: {
   size?: number;
@@ -2972,7 +2972,7 @@ export const Expenses: React.FC = () => {
                 >
                   {groupedTransactions.length === 0 ? (
                     <div className="py-20 text-center text-slate-400 select-none">
-                      <CustomReceiptIcon size={64} strokeWidth={1.5} className="mx-auto mb-3 opacity-30 text-slate-400" />
+                      <CustomReceiptIcon size={64} strokeWidth={1.15} className="mx-auto mb-3 text-slate-400" />
                       <p className="text-xs font-semibold">
                         কোনো লেনদেন পাওয়া যায়নি
                       </p>
@@ -3844,7 +3844,7 @@ export const Expenses: React.FC = () => {
                           className="peer w-full py-[15px] pl-[50px] pr-4 bg-transparent border border-slate-200 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-2xl font-bold text-slate-800 outline-none text-[15px] transition-all shadow-xs"
                         />
                         <div className="absolute left-[18px] top-1/2 -translate-y-1/2 text-slate-400 peer-focus:text-rose-500 transition-colors pointer-events-none">
-                          <CustomReceiptIcon size={28} strokeWidth={1.5} />
+                          <CustomReceiptIcon size={28} strokeWidth={1.15} />
                         </div>
                         <label
                           htmlFor="expense-notes-input"
@@ -4356,7 +4356,7 @@ export const Expenses: React.FC = () => {
                           className="peer w-full py-[15px] pl-[50px] pr-4 bg-transparent border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl font-bold text-[15px] text-slate-800 outline-none transition-all shadow-xs"
                         />
                         <div className="absolute left-[18px] top-1/2 -translate-y-1/2 text-slate-400 peer-focus:text-emerald-500 transition-colors pointer-events-none">
-                          <CustomReceiptIcon size={28} strokeWidth={1.5} />
+                          <CustomReceiptIcon size={28} strokeWidth={1.15} />
                         </div>
                         <label
                           htmlFor="income-notes-input"
@@ -6050,7 +6050,7 @@ const DuesManager: React.FC<DuesManagerProps> = ({
                           <CustomReceiptIcon
                             size={22}
                             className="text-[#9ca3af] shrink-0"
-                            strokeWidth={1.5}
+                            strokeWidth={1.15}
                           />
                         </div>
                         <input
@@ -8283,7 +8283,7 @@ const BudgetManager: React.FC<{ expenses: any[]; user: any }> = ({
           /* Image Accurate Beautiful Empty State */
           <div className="flex flex-col items-center justify-center py-20 text-slate-400 select-none">
             <div className="w-20 h-20 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mb-4 shadow-xs">
-              <CustomReceiptIcon size={32} strokeWidth={2.0} className="text-slate-300" />
+              <CustomReceiptIcon size={32} strokeWidth={1.25} className="text-slate-300" />
             </div>
             <p className="text-sm font-bold text-slate-500">কোন বাজেট নেই</p>
             <p className="text-[11px] text-slate-400 font-bold mt-1">
