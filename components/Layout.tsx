@@ -27,7 +27,6 @@ import {
   User,
   ShoppingBag,
   Bot,
-  Bell,
   Plus,
   ListTodo,
   Wallet,
@@ -40,6 +39,56 @@ import { User as UserType } from "@/types";
 import { useAppContext } from "@/context/AppContext";
 import { OfflineBanner } from "./OfflineBanner";
 import { AppLogo } from "./AppLogo";
+
+const CustomBellIcon = ({ size = 22, className = "" }: { size?: number; className?: string }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    className={className}
+  >
+    {/* Bell body with a shorter, more rounded head and beautifully curved downward bottom rim */}
+    <path
+      d="M12 6.2C8.8 6.2 8 8.5 8 11.2V13C8 14.5 7.2 15.5 5.5 16.3C5 16.6 5.1 17.3 5.7 17.3Q12 19.3 18.3 17.3C18.9 17.3 19 16.6 18.5 16.3C16.8 15.5 16 14.5 16 13V11.2C16 8.5 15.2 6.2 12 6.2Z"
+      fill="currentColor"
+    />
+    {/* Separated rounded clapper hanging at the bottom, perfectly positioned with a clean gap */}
+    <path
+      d="M9.8 19.8A2.2 2.2 0 0 0 14.2 19.8Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+const CustomSettingsIcon = ({ size = 22, className = "" }: { size?: number; className?: string }) => {
+  const maskId = React.useId();
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+    >
+      <mask id={maskId}>
+        <rect x="0" y="0" width="24" height="24" fill="white" />
+        <circle cx="12" cy="12" r="3.2" fill="black" />
+      </mask>
+      <g mask={`url(#${maskId})`}>
+        {/* Core center wheel */}
+        <circle cx="12" cy="12" r="6.2" fill="currentColor" />
+        {/* 6 symmetric highly-rounded gear cogs matching the reference image */}
+        <circle cx="12" cy="5.2" r="3.2" fill="currentColor" />
+        <circle cx="12" cy="18.8" r="3.2" fill="currentColor" />
+        <circle cx="6.1" cy="8.6" r="3.2" fill="currentColor" />
+        <circle cx="17.9" cy="8.6" r="3.2" fill="currentColor" />
+        <circle cx="6.1" cy="15.4" r="3.2" fill="currentColor" />
+        <circle cx="17.9" cy="15.4" r="3.2" fill="currentColor" />
+      </g>
+    </svg>
+  );
+};
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -366,7 +415,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
     {
       name: "সেটিংস",
       path: "/settings",
-      icon: <Settings size={20} />,
+      icon: <CustomSettingsIcon size={20} />,
       desc: "অ্যাপ কনফিগারেশন",
     },
   ];
@@ -644,7 +693,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 className="w-9 h-9 text-slate-700 hover:text-[#1a73e8] active:scale-90 transition-all duration-200 flex items-center justify-center relative bg-transparent"
                 title="নোটিফিকেশন"
               >
-                <Bell size={22} strokeWidth={1.5} fill="currentColor" />
+                <CustomBellIcon size={25} />
                 {notifications && notifications.filter(n => !n.is_read).length > 0 && (
                   <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse"></span>
                 )}
@@ -656,7 +705,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 className="w-9 h-9 text-slate-800 hover:text-[#1a73e8] active:scale-90 transition-all duration-200 flex items-center justify-center bg-transparent"
                 title="সেটিংস"
               >
-                <Settings size={21} strokeWidth={2} />
+                <CustomSettingsIcon size={20} />
               </button>
             </div>
           </div>
