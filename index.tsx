@@ -63,12 +63,30 @@ root.render(
 // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => {
-        console.log('Service Worker Registered successfully with scope:', reg.scope);
-      })
-      .catch(err => {
-        console.warn('Service Worker Registration failed:', err);
+    const hostname = window.location.hostname;
+    const isDevOrPreview = 
+      hostname === 'localhost' || 
+      hostname === '127.0.0.1' || 
+      hostname.includes('ais-dev-') ||
+      hostname.includes('ais-pre-') ||
+      hostname.includes('.run.app');
+
+    if (isDevOrPreview) {
+      // Unregister existing service worker in dev/preview to prevent cache-related blank page issues
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+        }
       });
+      console.log('Service Worker disabled/unregistered in development/preview to prevent caching issues.');
+    } else {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => {
+          console.log('Service Worker Registered successfully with scope:', reg.scope);
+        })
+        .catch(err => {
+          console.warn('Service Worker Registration failed:', err);
+        });
+    }
   });
 }

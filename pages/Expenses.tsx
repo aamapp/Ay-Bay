@@ -181,12 +181,12 @@ const CustomReceiptIcon = ({
     className={className}
   >
     {/* Main receipt body outline with rounded top-left and sharp wavy zigzag bottom */}
-    <path d="M15 5H10C7.239 5 5 7.239 5 10V19L7.5 17.2L10 19L12.5 17.2L15 19V5" />
-    {/* Roll at top right forming a loop fold */}
-    <path d="M15 5C17.761 5 20 7.239 20 10C20 12.761 17.761 15 15 15" />
+    <path d="M18 4H7C5.62 4 4.5 5.38 4.5 6.5V20L7.25 18.2L10 20L12.75 18.2L15.5 20V6.5" />
+    {/* Roll at top right forming a loop fold with a straight vertical right edge */}
+    <path d="M15.5 6.5C15.5 5.38 16.62 4 18 4C18.8 4 19.5 4.8 19.5 6V8.5C19.5 9.33 18.8 10 17.5 10H15.5" />
     {/* Document line details */}
-    <path d="M8.5 9.5H12.5" />
-    <path d="M8.5 12.5H11.5" />
+    <path d="M8 9.5H13" />
+    <path d="M8 13H12" />
   </svg>
 );
 
