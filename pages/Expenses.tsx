@@ -812,11 +812,26 @@ export const Expenses: React.FC = () => {
       mainFabRef.current.style.pointerEvents = "auto";
     }
 
-    lastGlobalScrollY.current = window.scrollY;
+    // Map to track the last scroll positions of individual scrollable containers
+    const scrollMap = new Map<HTMLElement | Window, number>();
+    scrollMap.set(window, window.scrollY);
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const diffScrollY = currentScrollY - lastGlobalScrollY.current;
+    const handleScroll = (e: Event) => {
+      let currentScrollY = 0;
+      let target: HTMLElement | Window = window;
+
+      if (e.target === document || e.target === window) {
+        currentScrollY = window.scrollY;
+        target = window;
+      } else {
+        const el = e.target as HTMLElement;
+        if (!el || typeof el.scrollTop !== "number") return;
+        currentScrollY = el.scrollTop;
+        target = el;
+      }
+
+      const lastScrollY = scrollMap.get(target) ?? 0;
+      const diffScrollY = currentScrollY - lastScrollY;
 
       // Use a delta threshold of 10px to avoid micro-scroll sensitivity
       if (Math.abs(diffScrollY) > 10) {
@@ -825,19 +840,20 @@ export const Expenses: React.FC = () => {
         } else if (diffScrollY < 0) {
           setMainFabVisibleDirectly(true);
         }
-        lastGlobalScrollY.current = currentScrollY;
+        scrollMap.set(target, currentScrollY);
       }
 
-      // Always show when close to top
+      // Always show when close to top of that scrollable container
       if (currentScrollY < 30) {
         setMainFabVisibleDirectly(true);
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Use capture: true to intercept scroll events from any nested scrollable child container
+    window.addEventListener("scroll", handleScroll, { capture: true, passive: true });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll, { capture: true });
     };
   }, [activeTab]);
 
