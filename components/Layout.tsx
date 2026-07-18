@@ -48,16 +48,22 @@ const CustomBellIcon = ({ size = 22, className = "" }: { size?: number; classNam
     fill="none"
     className={className}
   >
-    {/* Bell body with a shorter, more rounded head and beautifully curved downward bottom rim */}
+    {/* Bell body from the user-provided SVG code but with the bottom rim curved downwards like the reference */}
     <path
-      d="M12 6.2C8.8 6.2 8 8.5 8 11.2V13C8 14.5 7.2 15.5 5.5 16.3C5 16.6 5.1 17.3 5.7 17.3Q12 19.3 18.3 17.3C18.9 17.3 19 16.6 18.5 16.3C16.8 15.5 16 14.5 16 13V11.2C16 8.5 15.2 6.2 12 6.2Z"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M19 19Q12 20.5 5 19C4.16875 19 3.5 18.3312 3.5 17.5V16C3.5 15.6022 3.65804 15.2206 3.93934 14.9393C4.22064 14.658 4.60218 14.5 5 14.5V11C5 8.16 6.51 5.67 9 4.56C9.09 3.12 10.28 2 11.75 2C13.22 2 14.41 3.12 14.5 4.56C16.99 5.67 18.5 8.16 18.5 11V14.5C18.8978 14.5 19.2794 14.658 19.5607 14.9393C19.842 15.2206 20 15.6022 20 16V17.5C20 18.3312 19.3312 19 18.5 19H19Z"
       fill="currentColor"
     />
-    {/* Separated rounded clapper hanging at the bottom, perfectly positioned with a clean gap */}
-    <path
-      d="M9.8 19.8A2.2 2.2 0 0 0 14.2 19.8Z"
-      fill="currentColor"
-    />
+    {/* Clapper segment shifted slightly downwards to keep a beautiful gap under the curved bottom of the bell */}
+    <g transform="translate(0, 0.6)">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M11.99 22H11.96C11.5161 21.9961 11.08 21.849 10.72 21.58C10.36 21.31 10.09 20.93 9.96 20.5H14C13.8687 20.9272 13.6015 21.3032 13.24 21.57C12.88 21.84 12.44 21.99 12 21.99H11.99Z"
+        fill="currentColor"
+      />
+    </g>
   </svg>
 );
 
@@ -693,9 +699,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 className="w-9 h-9 text-slate-700 hover:text-[#1a73e8] active:scale-90 transition-all duration-200 flex items-center justify-center relative bg-transparent"
                 title="নোটিফিকেশন"
               >
-                <CustomBellIcon size={25} />
+                <CustomBellIcon size={20} />
                 {notifications && notifications.filter(n => !n.is_read).length > 0 && (
-                  <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse"></span>
+                  <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full border border-white animate-pulse"></span>
                 )}
               </button>
 
