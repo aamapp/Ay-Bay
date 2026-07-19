@@ -1,24 +1,37 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Rules for Car Rent Friends
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
     match /car_rent_friends/{friendId} {
-      allow read, write: if true;
+      allow read: if isSignedIn() && (resource == null || resource.data.userid == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.userid == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userid == request.auth.uid && request.resource.data.userid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userid == request.auth.uid;
     }
 
-    // Rules for Car Rent Trips
     match /car_rent_trips/{tripId} {
-      allow read, write: if true;
+      allow read: if isSignedIn() && (resource == null || resource.data.userid == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.userid == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userid == request.auth.uid && request.resource.data.userid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userid == request.auth.uid;
     }
 
-    // Rules for Car Rent Collections
     match /car_rent_collections/{collectionId} {
-      allow read, write: if true;
+      allow read: if isSignedIn() && (resource == null || resource.data.userid == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.userid == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userid == request.auth.uid && request.resource.data.userid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userid == request.auth.uid;
     }
 
-    // Rules for Car Rent Driver Payments
     match /car_rent_driver_payments/{paymentId} {
-      allow read, write: if true;
+      allow read: if isSignedIn() && (resource == null || resource.data.userid == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.userid == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userid == request.auth.uid && request.resource.data.userid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userid == request.auth.uid;
     }
 
     // Global Safety Net
