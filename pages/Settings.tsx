@@ -351,6 +351,68 @@ export const Settings: React.FC = () => {
     try {
       const dataToImport = importedData.data;
 
+      // 1. Generate UUID and map old IDs to new IDs to prevent RLS collisions with other users' existing rows
+      const idMap: Record<string, string> = {};
+
+      const generateUUID = () => {
+        if (typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID) {
+          return window.crypto.randomUUID();
+        }
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      };
+
+      const registerNewIds = (records: any[]) => {
+        if (!records) return;
+        records.forEach(r => {
+          if (r.id) {
+            // If the record does not belong to the current user, remap it to a brand new ID
+            if (r.userid !== user.id) {
+              idMap[r.id] = generateUUID();
+            }
+          }
+        });
+      };
+
+      // Register IDs for all categories in the imported file
+      if (dataToImport.projects) registerNewIds(dataToImport.projects);
+      if (dataToImport.clients) registerNewIds(dataToImport.clients);
+      if (dataToImport.income_records) registerNewIds(dataToImport.income_records);
+      if (dataToImport.expenses) registerNewIds(dataToImport.expenses);
+      if (dataToImport.ghazal_notes) registerNewIds(dataToImport.ghazal_notes);
+      if (dataToImport.shopping_lists) registerNewIds(dataToImport.shopping_lists);
+      if (dataToImport.due_persons) registerNewIds(dataToImport.due_persons);
+      
+      if (dataToImport.car_rent_friends) registerNewIds(dataToImport.car_rent_friends);
+      if (dataToImport.car_rent_trips) registerNewIds(dataToImport.car_rent_trips);
+      if (dataToImport.car_rent_collections) registerNewIds(dataToImport.car_rent_collections);
+      if (dataToImport.car_rent_driver_payments) registerNewIds(dataToImport.car_rent_driver_payments);
+
+      // Helper to update records with new IDs and replace references
+      const mapRecords = (records: any[], foreignKeyFields: string[] = []): any[] => {
+        if (!records) return [];
+        return records.map(r => {
+          const updated = { ...r };
+          // Map own ID if it has been registered for mapping
+          if (updated.id && idMap[updated.id]) {
+            updated.id = idMap[updated.id];
+          }
+          // Map foreign key fields
+          foreignKeyFields.forEach(field => {
+            if (updated[field] && idMap[updated[field]]) {
+              updated[field] = idMap[updated[field]];
+            }
+          });
+          // Special handling for car_rent_trips participantIds array
+          if (updated.participantIds && Array.isArray(updated.participantIds)) {
+            updated.participantIds = updated.participantIds.map((pid: string) => idMap[pid] || pid);
+          }
+          return updated;
+        });
+      };
+
       const importSupabaseTable = async (table: string, records: any[]) => {
         if (!records || records.length === 0) return;
         const updatedRecords = records.map(r => ({ ...r, userid: user.id }));
@@ -379,38 +441,38 @@ export const Settings: React.FC = () => {
       const importPromises: Promise<any>[] = [];
 
       if (selectedImportCategories['projects'] && dataToImport.projects) {
-        importPromises.push(importSupabaseTable('projects', dataToImport.projects));
+        importPromises.push(importSupabaseTable('projects', mapRecords(dataToImport.projects)));
       }
       if (selectedImportCategories['clients'] && dataToImport.clients) {
-        importPromises.push(importSupabaseTable('clients', dataToImport.clients));
+        importPromises.push(importSupabaseTable('clients', mapRecords(dataToImport.clients)));
       }
       if (selectedImportCategories['income_records'] && dataToImport.income_records) {
-        importPromises.push(importSupabaseTable('income_records', dataToImport.income_records));
+        importPromises.push(importSupabaseTable('income_records', mapRecords(dataToImport.income_records, ['projectid'])));
       }
       if (selectedImportCategories['expenses'] && dataToImport.expenses) {
-        importPromises.push(importSupabaseTable('expenses', dataToImport.expenses));
+        importPromises.push(importSupabaseTable('expenses', mapRecords(dataToImport.expenses)));
       }
       if (selectedImportCategories['ghazal_notes'] && dataToImport.ghazal_notes) {
-        importPromises.push(importSupabaseTable('ghazal_notes', dataToImport.ghazal_notes));
+        importPromises.push(importSupabaseTable('ghazal_notes', mapRecords(dataToImport.ghazal_notes)));
       }
       if (selectedImportCategories['shopping_lists'] && dataToImport.shopping_lists) {
-        importPromises.push(importSupabaseTable('shopping_lists', dataToImport.shopping_lists));
+        importPromises.push(importSupabaseTable('shopping_lists', mapRecords(dataToImport.shopping_lists)));
       }
       if (selectedImportCategories['due_persons'] && dataToImport.due_persons) {
-        importPromises.push(importSupabaseTable('due_persons', dataToImport.due_persons));
+        importPromises.push(importSupabaseTable('due_persons', mapRecords(dataToImport.due_persons)));
       }
       if (selectedImportCategories['car_rent']) {
         if (dataToImport.car_rent_friends) {
-          importPromises.push(importFirestoreCollection('car_rent_friends', dataToImport.car_rent_friends));
+          importPromises.push(importFirestoreCollection('car_rent_friends', mapRecords(dataToImport.car_rent_friends)));
         }
         if (dataToImport.car_rent_trips) {
-          importPromises.push(importFirestoreCollection('car_rent_trips', dataToImport.car_rent_trips));
+          importPromises.push(importFirestoreCollection('car_rent_trips', mapRecords(dataToImport.car_rent_trips)));
         }
         if (dataToImport.car_rent_collections) {
-          importPromises.push(importFirestoreCollection('car_rent_collections', dataToImport.car_rent_collections));
+          importPromises.push(importFirestoreCollection('car_rent_collections', mapRecords(dataToImport.car_rent_collections, ['friendId', 'tripId'])));
         }
         if (dataToImport.car_rent_driver_payments) {
-          importPromises.push(importFirestoreCollection('car_rent_driver_payments', dataToImport.car_rent_driver_payments));
+          importPromises.push(importFirestoreCollection('car_rent_driver_payments', mapRecords(dataToImport.car_rent_driver_payments)));
         }
       }
 
