@@ -83,8 +83,8 @@ import { DatePicker } from "@/components/DatePicker";
 import { TimePicker } from "@/components/TimePicker";
 import { WalletManager } from "@/components/WalletManager";
 import { ImageCropper } from "@/components/ImageCropper";
+import { CustomListChecksIcon, CustomBudgetIcon, CustomEditIcon, CustomDeleteIcon, CustomExpensesTabIcon, CustomDuesTabIcon, CustomSavingsTabIcon, CustomTasksTabIcon } from "@/components/CustomMenuIcons";
 import { AppLogo } from "@/components/AppLogo";
-import { CustomEditIcon, CustomDeleteIcon } from "@/components/CustomMenuIcons";
 import {
   DuePerson,
   DueTransaction,
@@ -2480,25 +2480,13 @@ export const Expenses: React.FC = () => {
               className="flex flex-col items-center w-[44px] cursor-pointer group focus:outline-none pb-2.5 relative"
             >
               <div
-                className={`w-[27px] h-[27px] rounded-[8px] flex items-center justify-center transition-all border relative ${
+                className={`w-[27px] h-[27px] flex items-center justify-center transition-all relative ${
                   activeTab === "expenses"
-                    ? "border-[#1a73e8] text-white bg-[#1a73e8] shadow-xs"
-                    : "border-[#cdd5de] text-[#8e9aa8] hover:border-slate-300 hover:text-slate-600 bg-white"
+                    ? "text-[#1a73e8]"
+                    : "text-[#8e9aa8] hover:text-[#1a73e8]"
                 }`}
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M20 9H4l4.5-4.5" />
-                  <path d="M4 15h16l-4.5 4.5" />
-                </svg>
+                <CustomExpensesTabIcon size={22} strokeWidth={1.5} active={activeTab === "expenses"} />
               </div>
             </button>
 
@@ -2509,25 +2497,13 @@ export const Expenses: React.FC = () => {
               className="flex flex-col items-center w-[44px] cursor-pointer group focus:outline-none pb-2.5 relative"
             >
               <div
-                className={`w-[27px] h-[27px] rounded-[8px] flex items-center justify-center transition-all border relative ${
+                className={`w-[27px] h-[27px] flex items-center justify-center transition-all relative ${
                   activeTab === "dues"
-                    ? "border-[#1a73e8] text-white bg-[#1a73e8] shadow-xs"
-                    : "border-[#cdd5de] text-[#8e9aa8] hover:border-slate-300 hover:text-slate-600 bg-white"
+                    ? "text-[#1a73e8]"
+                    : "text-[#8e9aa8] hover:text-[#1a73e8]"
                 }`}
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 4v16l-4.5-4.5" />
-                  <path d="M15 20V4l4.5 4.5" />
-                </svg>
+                <CustomDuesTabIcon size={22} strokeWidth={1.5} active={activeTab === "dues"} />
               </div>
             </button>
 
@@ -2538,24 +2514,13 @@ export const Expenses: React.FC = () => {
               className="flex flex-col items-center w-[44px] cursor-pointer group focus:outline-none pb-2.5 relative"
             >
               <div
-                className={`w-[27px] h-[27px] rounded-[8px] flex items-center justify-center transition-all border relative ${
+                className={`w-[27px] h-[27px] flex items-center justify-center transition-all relative ${
                   activeTab === "reports"
-                    ? "border-[#1a73e8] text-white bg-[#1a73e8] shadow-xs"
-                    : "border-[#cdd5de] text-[#8e9aa8] hover:border-slate-300 hover:text-slate-600 bg-white"
+                    ? "text-[#1a73e8]"
+                    : "text-[#8e9aa8] hover:text-[#1a73e8]"
                 }`}
               >
-                <svg
-                  width="16.5"
-                  height="16.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M 5.5 14.5 C 8 11.5, 9.5 9.5, 11.5 9.5 C 13.5 9.5, 14.5 14.5, 16.5 14.5 C 18 14.5, 19 13, 20 12" />
-                </svg>
+                <CustomBudgetIcon size={22} strokeWidth={1.5} active={activeTab === "reports"} />
               </div>
             </button>
 
@@ -2566,13 +2531,13 @@ export const Expenses: React.FC = () => {
               className="flex flex-col items-center w-[44px] cursor-pointer group focus:outline-none pb-2.5 relative"
             >
               <div
-                className={`w-[27px] h-[27px] rounded-[8px] flex items-center justify-center transition-all border relative ${
+                className={`w-[27px] h-[27px] flex items-center justify-center transition-all relative ${
                   activeTab === "savings"
-                    ? "border-[#1a73e8] text-white bg-[#1a73e8] shadow-xs"
-                    : "border-[#cdd5de] text-[#8e9aa8] hover:border-slate-300 hover:text-slate-600 bg-white"
+                    ? "text-[#1a73e8]"
+                    : "text-[#8e9aa8] hover:text-[#1a73e8]"
                 }`}
               >
-                <Plus size={14} strokeWidth={2.4} />
+                <CustomSavingsTabIcon size={22} strokeWidth={1.5} active={activeTab === "savings"} />
               </div>
             </button>
 
@@ -2583,13 +2548,13 @@ export const Expenses: React.FC = () => {
               className="flex flex-col items-center w-[44px] cursor-pointer group focus:outline-none pb-2.5 relative"
             >
               <div
-                className={`w-[27px] h-[27px] rounded-[8px] flex items-center justify-center transition-all border relative ${
+                className={`w-[27px] h-[27px] flex items-center justify-center transition-all relative ${
                   activeTab === "tasks"
-                    ? "border-[#1a73e8] text-white bg-[#1a73e8] shadow-xs"
-                    : "border-[#cdd5de] text-[#8e9aa8] hover:border-slate-300 hover:text-slate-600 bg-white"
+                    ? "text-[#1a73e8]"
+                    : "text-[#8e9aa8] hover:text-[#1a73e8]"
                 }`}
               >
-                <ListTodo size={14} strokeWidth={2.4} />
+                <CustomTasksTabIcon size={22} strokeWidth={1.5} active={activeTab === "tasks"} />
               </div>
             </button>
 
