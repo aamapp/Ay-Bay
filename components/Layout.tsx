@@ -50,27 +50,18 @@ const CustomBellIcon = ({ size = 22, className = "" }: { size?: number; classNam
     fill="none"
     className={className}
   >
-    {/* Bell body from the user-provided SVG code but with the bottom rim curved downwards like the reference */}
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M19 19Q12 20.5 5 19C4.16875 19 3.5 18.3312 3.5 17.5V16C3.5 15.6022 3.65804 15.2206 3.93934 14.9393C4.22064 14.658 4.60218 14.5 5 14.5V11C5 8.16 6.51 5.67 9 4.56C9.09 3.12 10.28 2 11.75 2C13.22 2 14.41 3.12 14.5 4.56C16.99 5.67 18.5 8.16 18.5 11V14.5C18.8978 14.5 19.2794 14.658 19.5607 14.9393C19.842 15.2206 20 15.6022 20 16V17.5C20 18.3312 19.3312 19 18.5 19H19Z"
+      d="M8.35179 20.2418C9.19288 21.311 10.5142 22 12 22C13.4858 22 14.8071 21.311 15.6482 20.2418C13.2264 20.57 10.7736 20.57 8.35179 20.2418Z"
       fill="currentColor"
     />
-    {/* Clapper segment shifted slightly downwards to keep a beautiful gap under the curved bottom of the bell */}
-    <g transform="translate(0, 0.6)">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M11.99 22H11.96C11.5161 21.9961 11.08 21.849 10.72 21.58C10.36 21.31 10.09 20.93 9.96 20.5H14C13.8687 20.9272 13.6015 21.3032 13.24 21.57C12.88 21.84 12.44 21.99 12 21.99H11.99Z"
-        fill="currentColor"
-      />
-    </g>
+    <path
+      d="M18.7491 9V9.7041C18.7491 10.5491 18.9903 11.3752 19.4422 12.0782L20.5496 13.8012C21.5612 15.3749 20.789 17.5139 19.0296 18.0116C14.4273 19.3134 9.57274 19.3134 4.97036 18.0116C3.21105 17.5139 2.43882 15.3749 3.45036 13.8012L4.5578 12.0782C5.00972 11.3752 5.25087 10.5491 5.25087 9.7041V9C5.25087 5.13401 8.27256 2 12 2C15.7274 2 18.7491 5.13401 18.7491 9Z"
+      fill="currentColor"
+    />
   </svg>
 );
 
 const CustomSettingsIcon = ({ size = 22, className = "" }: { size?: number; className?: string }) => {
-  const maskId = React.useId();
   return (
     <svg
       width={size}
@@ -79,21 +70,10 @@ const CustomSettingsIcon = ({ size = 22, className = "" }: { size?: number; clas
       fill="none"
       className={className}
     >
-      <mask id={maskId}>
-        <rect x="0" y="0" width="24" height="24" fill="white" />
-        <circle cx="12" cy="12" r="3.2" fill="black" />
-      </mask>
-      <g mask={`url(#${maskId})`}>
-        {/* Core center wheel */}
-        <circle cx="12" cy="12" r="6.2" fill="currentColor" />
-        {/* 6 symmetric highly-rounded gear cogs matching the reference image */}
-        <circle cx="12" cy="5.2" r="3.2" fill="currentColor" />
-        <circle cx="12" cy="18.8" r="3.2" fill="currentColor" />
-        <circle cx="6.1" cy="8.6" r="3.2" fill="currentColor" />
-        <circle cx="17.9" cy="8.6" r="3.2" fill="currentColor" />
-        <circle cx="6.1" cy="15.4" r="3.2" fill="currentColor" />
-        <circle cx="17.9" cy="15.4" r="3.2" fill="currentColor" />
-      </g>
+      <path
+        d="M20.1 9.2214C18.29 9.2214 17.55 7.9414 18.45 6.3714C18.97 5.4614 18.66 4.3014 17.75 3.7814L16.02 2.7914C15.23 2.3214 14.21 2.6014 13.74 3.3914L13.63 3.5814C12.73 5.1514 11.25 5.1514 10.34 3.5814L10.23 3.3914C9.78 2.6014 8.76 2.3214 7.97 2.7914L6.24 3.7814C5.33 4.3014 5.02 5.4714 5.54 6.3814C6.45 7.9414 5.71 9.2214 3.9 9.2214C2.86 9.2214 2 10.0714 2 11.1214V12.8814C2 13.9214 2.85 14.7814 3.9 14.7814C5.71 14.7814 6.45 16.0614 5.54 17.6314C5.02 18.5414 5.33 19.7014 6.24 20.2214L7.97 21.2114C8.76 21.6814 9.78 21.4014 10.25 20.6114L10.36 20.4214C11.26 18.8514 12.74 18.8514 13.65 20.4214L13.76 20.6114C14.23 21.4014 15.25 21.6814 16.04 21.2114L17.77 20.2214C18.68 19.7014 18.99 18.5314 18.47 17.6314C17.56 16.0614 18.3 14.7814 20.11 14.7814C21.15 14.7814 22.01 13.9314 22.01 12.8814V11.1214C22 10.0814 21.15 9.2214 20.1 9.2214ZM12 15.2514C10.21 15.2514 8.75 13.7914 8.75 12.0014C8.75 10.2114 10.21 8.7514 12 8.7514C13.79 8.7514 15.25 10.2114 15.25 12.0014C15.25 13.7914 13.79 15.2514 12 15.2514Z"
+        fill="currentColor"
+      />
     </svg>
   );
 };
