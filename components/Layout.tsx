@@ -40,7 +40,7 @@ import { User as UserType } from "@/types";
 import { useAppContext } from "@/context/AppContext";
 import { OfflineBanner } from "./OfflineBanner";
 import { AppLogo } from "./AppLogo";
-import { CustomListChecksIcon, CustomBudgetIcon, CustomExpensesTabIcon, CustomDuesTabIcon, CustomSavingsTabIcon, CustomTasksTabIcon } from "./CustomMenuIcons";
+import { CustomListChecksIcon, CustomBudgetIcon, CustomExpensesTabIcon, CustomDuesTabIcon, CustomSavingsTabIcon, CustomTasksTabIcon, CustomFordiMenuIcon, CustomRecycleBinMenuIcon, CustomAiAssistantMenuIcon, CustomCarRentMenuIcon, CustomTabMenuIcon } from "./CustomMenuIcons";
 
 const CustomBellIcon = ({ size = 22, className = "" }: { size?: number; className?: string }) => (
   <svg
@@ -128,6 +128,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
     isOnline,
     notifications,
   } = useAppContext();
+
+  const toBanglaNumber = (num: number | string) => {
+    const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toString().replace(/\d/g, (d) => banglaDigits[parseInt(d, 10)]);
+  };
+
+  const unreadNotificationCount = notifications ? notifications.filter(n => !n.is_read).length : 0;
   const location = useLocation();
   const navigate = useNavigate();
   const isAiAssistant = location.pathname === "/ai-assistant";
@@ -373,19 +380,19 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
     {
       name: "এআই অ্যাসিস্ট্যান্ট",
       path: "/ai-assistant",
-      icon: <Bot size={20} />,
+      icon: <CustomAiAssistantMenuIcon size={20} />,
       desc: "স্মার্ট হেল্পার",
     },
     {
       name: "ফর্দি",
       path: "/shopping-lists",
-      icon: <ShoppingBag size={20} />,
+      icon: <CustomFordiMenuIcon size={20} />,
       desc: "বাজারের তালিকা",
     },
     {
       name: "গাড়ি ভাড়া হিসাব",
       path: "/car-rent",
-      icon: <Car size={20} />,
+      icon: <CustomCarRentMenuIcon size={20} />,
       desc: "ভাড়া ও বকেয়া হিসাব",
     },
     {
@@ -397,7 +404,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
     {
       name: "রিসাইকেল বিন",
       path: "/trash",
-      icon: <Trash2 size={20} />,
+      icon: <CustomRecycleBinMenuIcon size={20} />,
       desc: "ডিলিট করা প্রজেক্ট",
     },
     {
@@ -682,8 +689,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 title="নোটিফিকেশন"
               >
                 <CustomBellIcon size={20} />
-                {notifications && notifications.filter(n => !n.is_read).length > 0 && (
-                  <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full border border-white animate-pulse"></span>
+                {unreadNotificationCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 bg-red-500 text-white font-black text-[10px] rounded-full flex items-center justify-center border-2 border-white leading-none shadow-xs">
+                    {unreadNotificationCount > 99 ? '৯৯+' : toBanglaNumber(unreadNotificationCount)}
+                  </span>
                 )}
               </button>
 
@@ -799,25 +808,54 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 className="flex flex-col items-center justify-start pt-2 h-full w-8 sm:w-10 cursor-pointer group focus:outline-none relative"
               >
                 <div
-                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all border overflow-hidden relative ${
-                    activeExpenseTab === "menu"
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all border relative ${
+                    user.avatar_url
+                      ? activeExpenseTab === "menu"
+                        ? "border-[#1a73e8] ring-2 ring-[#1a73e8]/30 bg-white"
+                        : "border-[#cdd5de] hover:border-slate-300 bg-white"
+                      : activeExpenseTab === "menu"
                       ? "border-[#1a73e8] text-white bg-[#1a73e8] shadow-xs"
                       : "border-[#cdd5de] text-[#8e9aa8] hover:border-slate-300 hover:text-slate-600 bg-white"
                   }`}
                 >
                   {user.avatar_url ? (
-                    <img
-                      src={user.avatar_url}
-                      alt="Menu"
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random`;
-                      }}
-                    />
+                    <>
+                      <div className="w-full h-full rounded-full overflow-hidden">
+                        <img
+                          src={user.avatar_url}
+                          alt="Menu"
+                          className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random`;
+                          }}
+                        />
+                      </div>
+                      <div
+                        className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center shadow-xs border-2 border-white transition-colors ${
+                          activeExpenseTab === "menu"
+                            ? "bg-[#1a73e8] text-white"
+                            : "bg-slate-200 text-slate-800"
+                        }`}
+                      >
+                        <svg
+                          width="9"
+                          height="9"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                        >
+                          <line x1="2" y1="3" x2="10" y2="3" />
+                          <line x1="2" y1="6" x2="10" y2="6" />
+                          <line x1="2" y1="9" x2="10" y2="9" />
+                        </svg>
+                      </div>
+                    </>
                   ) : (
-                    <User size={13} strokeWidth={2.5} />
+                    <CustomTabMenuIcon size={16} />
                   )}
                 </div>
               </button>
@@ -901,7 +939,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
               <div
                 className={`transition-transform duration-200 ${isMoreMenuOpen ? "-translate-y-0.5" : ""} relative`}
               >
-                <Menu size={22} />
+                <CustomTabMenuIcon size={22} />
                 {trashCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[8px] font-black px-1 py-0.5 rounded-full min-w-[14px] h-[14px] flex items-center justify-center shadow-sm ring-1 ring-white animate-in zoom-in duration-300">
                     {trashCount}

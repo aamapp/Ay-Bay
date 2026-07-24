@@ -9,8 +9,8 @@ import { Wallet } from '@/types';
 import { AppLogo } from './AppLogo';
 import { ConfirmModal } from './ConfirmModal';
 import { DatePicker } from './DatePicker';
+import { CustomWalletMenuIcon, CustomPdfDownloadIcon } from './CustomMenuIcons';
 import { 
-  Wallet as WalletIcon, 
   Plus, 
   MoreVertical, 
   Trash2, 
@@ -1492,51 +1492,7 @@ export const WalletManager: React.FC = () => {
                   {pdfGenerating ? (
                     <Loader2 size={16} className="animate-spin text-[#1a73e8]" />
                   ) : (
-                    <svg
-                      viewBox="0 0 32 32"
-                      width={22}
-                      height={22}
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clipPath="url(#pdf-spec-clip-wallet)">
-                        {/* Document Body (Light Gray) */}
-                        <path d="M4 2H20L28 10V30H4V2Z" fill="#E2E8F0" />
-                        
-                        {/* Red Bottom Banner */}
-                        <rect x="4" y="20" width="24" height="10" fill="#E14E3A" />
-                        
-                        {/* PDF Text */}
-                        <text
-                          x="16"
-                          y="27.5"
-                          fill="#FFFFFF"
-                          fontSize="7.5"
-                          fontWeight="900"
-                          fontFamily="Inter, system-ui, sans-serif"
-                          textAnchor="middle"
-                          letterSpacing="0.2"
-                        >
-                          PDF
-                        </text>
-                      </g>
-                      
-                      {/* Fold flap */}
-                      <path d="M20 2L20 10L28 10Z" fill="#CBD5E1" />
-                      <path d="M20 10L28 10L20 14Z" fill="rgba(0,0,0,0.08)" />
-                      
-                      {/* Arrow Shadow */}
-                      <path d="M14.5 6.5H17.5V12.5H20.5L16 17.5L11.5 12.5H14.5V6.5Z" fill="rgba(0,0,0,0.12)" />
-                      
-                      {/* Red Arrow */}
-                      <path d="M14 6H18V12H21L16 17L11 12H14V6Z" fill="#E14E3A" />
-
-                      <defs>
-                        <clipPath id="pdf-spec-clip-wallet">
-                          <path d="M4 5C4 3.34315 5.34315 2 7 2H20L28 10V27C28 28.6569 26.6569 30 25 30H7C5.34315 30 4 28.6569 4 27V5Z" />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <CustomPdfDownloadIcon size={22} className="text-[#1C274C]" />
                   )}
                 </button>
               </div>
@@ -1717,7 +1673,7 @@ export const WalletManager: React.FC = () => {
         </div>
       ) : walletCount === 0 ? (
         <div className="text-center py-12 bg-white border border-dashed border-slate-200 rounded-xl p-5 mx-0.5 flex-1 flex flex-col items-center justify-center">
-          <WalletIcon size={40} className="mx-auto text-slate-300 mb-2.5" />
+          <CustomWalletMenuIcon size={40} className="mx-auto text-slate-300 mb-2.5" />
           <p className="text-slate-500 font-semibold text-sm mb-1">কোনো ওয়ালেট পাওয়া যায়নি</p>
           <p className="text-slate-400 text-xs mb-3.5">একটি নতুন ওয়ালেট যোগ করুন আপনার হিসাব ট্র্যাকিং শুরু করতে।</p>
           <button 
@@ -1744,7 +1700,7 @@ export const WalletManager: React.FC = () => {
                 {/* Left side: Icon & Title info */}
                 <div className="flex items-center gap-3 flex-1 min-w-0 pr-1">
                   <div className="w-[40px] h-[40px] rounded-full bg-blue-50/70 border border-blue-100/25 flex items-center justify-center text-blue-600/80 transition-all group-hover:scale-105 duration-300 flex-shrink-0">
-                    <WalletIcon size={18} className="stroke-[1.8]" />
+                    <CustomWalletMenuIcon size={18} strokeWidth={1.8} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 flex-wrap pb-0.5">
@@ -1862,7 +1818,7 @@ export const WalletManager: React.FC = () => {
             <div className="text-center pt-8 pb-5 px-6">
               {/* Profile-like Wallet Icon Container */}
               <div className="mx-auto mb-4 flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 text-[#1e75eb] border border-blue-100 shadow-sm animate-in zoom-in-50 duration-300">
-                <WalletIcon size={24} strokeWidth={1.5} />
+                <CustomWalletMenuIcon size={24} strokeWidth={1.5} />
               </div>
               <h3 className="text-[18px] font-medium text-slate-800 leading-tight">
                 {editingWallet ? 'ওয়ালেট সম্পাদনা করুন' : 'নতুন ওয়ালেট অ্যাড করুন'}
@@ -1884,7 +1840,7 @@ export const WalletManager: React.FC = () => {
                     className="peer w-full py-3.5 pl-11 pr-4 bg-transparent border border-slate-200 focus:border-blue-500 rounded-[16px] outline-none text-[#1e293b] text-[15px] font-medium transition-all shadow-xs"
                   />
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 peer-focus:text-blue-500 transition-colors pointer-events-none">
-                    <WalletIcon size={18} strokeWidth={1.5} />
+                    <CustomWalletMenuIcon size={18} strokeWidth={1.5} />
                   </div>
                   <label
                     htmlFor="wallet-name-input"
@@ -1932,7 +1888,7 @@ export const WalletManager: React.FC = () => {
             <div className="text-center pt-8 pb-5 px-6">
               {/* Profile-like Wallet Icon Container for Add Money */}
               <div className="mx-auto mb-4 flex items-center justify-center w-14 h-14 rounded-full bg-emerald-50 text-emerald-500 border border-emerald-100 shadow-sm animate-in zoom-in-50 duration-300">
-                <WalletIcon size={24} strokeWidth={1.5} />
+                <CustomWalletMenuIcon size={24} strokeWidth={1.5} />
               </div>
               <h3 className="text-[18px] font-medium text-slate-800 leading-tight">
                 টাকা যুক্ত করুন

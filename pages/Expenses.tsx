@@ -83,7 +83,7 @@ import { DatePicker } from "@/components/DatePicker";
 import { TimePicker } from "@/components/TimePicker";
 import { WalletManager } from "@/components/WalletManager";
 import { ImageCropper } from "@/components/ImageCropper";
-import { CustomListChecksIcon, CustomBudgetIcon, CustomEditIcon, CustomDeleteIcon, CustomExpensesTabIcon, CustomDuesTabIcon, CustomSavingsTabIcon, CustomTasksTabIcon } from "@/components/CustomMenuIcons";
+import { CustomListChecksIcon, CustomBudgetIcon, CustomEditIcon, CustomDeleteIcon, CustomExpensesTabIcon, CustomDuesTabIcon, CustomSavingsTabIcon, CustomTasksTabIcon, CustomWalletMenuIcon, CustomRecycleBinMenuIcon, CustomFordiMenuIcon, CustomAiAssistantMenuIcon, CustomCarRentMenuIcon, CustomTabMenuIcon, CustomPdfDownloadIcon } from "@/components/CustomMenuIcons";
 import { AppLogo } from "@/components/AppLogo";
 import {
   DuePerson,
@@ -144,19 +144,44 @@ const CustomCoinsIcon = ({
     height={size}
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
-    strokeWidth={strokeWidth}
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    {/* Back coin (crescent peeking from behind) */}
-    <path d="M17 7A7.5 7.5 0 0 1 21.5 14A7.5 7.5 0 0 1 14 21.5A7.5 7.5 0 0 1 7 17" />
-    {/* Front coin */}
-    <circle cx="10" cy="10" r="7.5" />
-    {/* Dollar Sign inside front coin (perfectly proportioned and centered) */}
-    <path d="M13 7h-4.5a1.5 1.5 0 0 0 0 3h3a1.5 1.5 0 0 1 0 3H7" />
-    <path d="M10 5.5v9" />
+    <path
+      d="M8 11.4002C8 12.1702 8.6 12.8002 9.33 12.8002H10.83C11.47 12.8002 11.99 12.2502 11.99 11.5802C11.99 10.8502 11.67 10.5902 11.2 10.4202L8.8 9.5802C8.32 9.4102 8 9.1502 8 8.4202C8 7.7502 8.52 7.2002 9.16 7.2002H10.66C11.4 7.2102 12 7.8302 12 8.6002"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10 12.8496V13.5896"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10 6.41016V7.19016"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M9.99 17.98C14.4028 17.98 17.98 14.4028 17.98 9.99C17.98 5.57724 14.4028 2 9.99 2C5.57724 2 2 5.57724 2 9.99C2 14.4028 5.57724 17.98 9.99 17.98Z"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12.9805 19.88C13.8805 21.15 15.3505 21.98 17.0305 21.98C19.7605 21.98 21.9805 19.76 21.9805 17.03C21.9805 15.37 21.1605 13.9 19.9105 13"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -277,25 +302,25 @@ export const Expenses: React.FC = () => {
     {
       name: "ওয়ালেট",
       path: "wallet",
-      icon: <Wallet size={20} />,
+      icon: <CustomWalletMenuIcon size={20} />,
       desc: "ওয়ালেট ও পেমেন্ট হিসাব",
     },
     {
       name: "এআই অ্যাসিস্ট্যান্ট",
       path: "/ai-assistant",
-      icon: <Bot size={20} />,
+      icon: <CustomAiAssistantMenuIcon size={20} />,
       desc: "স্মার্ট হেল্পার",
     },
     {
       name: "ফর্দি",
       path: "/shopping-lists",
-      icon: <ShoppingBag size={20} />,
+      icon: <CustomFordiMenuIcon size={20} />,
       desc: "বাজারের তালিকা",
     },
     {
       name: "গাড়ি ভাড়া হিসাব",
       path: "/car-rent",
-      icon: <Car size={20} />,
+      icon: <CustomCarRentMenuIcon size={20} />,
       desc: "ভাড়া ও বকেয়া হিসাব",
     },
     {
@@ -307,7 +332,7 @@ export const Expenses: React.FC = () => {
     {
       name: "রিসাইকেল বিন",
       path: "/trash",
-      icon: <Trash2 size={20} />,
+      icon: <CustomRecycleBinMenuIcon size={20} />,
       desc: "ডিলিট করা প্রজেক্ট",
     },
   ];
@@ -2565,25 +2590,54 @@ export const Expenses: React.FC = () => {
               className="flex flex-col items-center w-[44px] cursor-pointer group focus:outline-none pb-2.5 relative"
             >
               <div
-                className={`w-[27px] h-[27px] rounded-full flex items-center justify-center transition-all border overflow-hidden relative ${
-                  activeTab === "menu"
+                className={`w-[27px] h-[27px] rounded-full flex items-center justify-center transition-all border relative ${
+                  user.avatar_url
+                    ? activeTab === "menu"
+                      ? "border-[#1a73e8] ring-2 ring-[#1a73e8]/30 bg-white"
+                      : "border-[#cdd5de] hover:border-slate-300 bg-white"
+                    : activeTab === "menu"
                     ? "border-[#1a73e8] text-white bg-[#1a73e8] shadow-xs"
                     : "border-[#cdd5de] text-[#8e9aa8] hover:border-slate-300 hover:text-slate-600 bg-white"
                 }`}
               >
                 {user.avatar_url ? (
-                  <img
-                    src={user.avatar_url}
-                    alt="Menu"
-                    className="w-full h-full object-cover"
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random`;
-                    }}
-                  />
+                  <>
+                    <div className="w-full h-full rounded-full overflow-hidden">
+                      <img
+                        src={user.avatar_url}
+                        alt="Menu"
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random`;
+                        }}
+                      />
+                    </div>
+                    <div
+                      className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center shadow-xs border-2 border-white transition-colors ${
+                        activeTab === "menu"
+                          ? "bg-[#1a73e8] text-white"
+                          : "bg-slate-200 text-slate-800"
+                      }`}
+                    >
+                      <svg
+                        width="9"
+                        height="9"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                      >
+                        <line x1="2" y1="3" x2="10" y2="3" />
+                        <line x1="2" y1="6" x2="10" y2="6" />
+                        <line x1="2" y1="9" x2="10" y2="9" />
+                      </svg>
+                    </div>
+                  </>
                 ) : (
-                  <UserIcon size={14} strokeWidth={2.4} />
+                  <CustomTabMenuIcon size={16} />
                 )}
               </div>
             </button>
@@ -3859,7 +3913,7 @@ export const Expenses: React.FC = () => {
                               className="w-full flex items-center justify-between px-4 py-3.5 bg-white border border-slate-200 hover:border-slate-300 rounded-2xl active:bg-slate-50/50 transition-all text-left group cursor-pointer shadow-xs"
                             >
                               <div className="flex items-center">
-                                <Wallet
+                                <CustomWalletMenuIcon
                                   size={20}
                                   className="text-slate-400 mr-3 shrink-0"
                                 />
@@ -3910,7 +3964,7 @@ export const Expenses: React.FC = () => {
                                       }`}
                                     >
                                       <div className="flex items-center">
-                                        <Wallet
+                                        <CustomWalletMenuIcon
                                           size={16}
                                           className={`mr-2.5 ${selectedWalletName === wallet.name ? "text-rose-500" : "text-slate-400"}`}
                                         />
@@ -4371,7 +4425,7 @@ export const Expenses: React.FC = () => {
                               className="w-full flex items-center justify-between px-4 py-3.5 bg-white border border-slate-200 hover:border-slate-300 rounded-2xl active:bg-slate-50/50 transition-all text-left group cursor-pointer shadow-xs"
                             >
                               <div className="flex items-center">
-                                <Wallet
+                                <CustomWalletMenuIcon
                                   size={20}
                                   className="text-slate-400 mr-3 shrink-0"
                                 />
@@ -4421,7 +4475,7 @@ export const Expenses: React.FC = () => {
                                           }`}
                                         >
                                           <div className="flex items-center">
-                                            <Wallet
+                                            <CustomWalletMenuIcon
                                               size={16}
                                               className={`mr-2.5 ${selectedWalletName === method ? "text-emerald-500" : "text-slate-400"}`}
                                             />
@@ -4461,7 +4515,7 @@ export const Expenses: React.FC = () => {
                                           }`}
                                         >
                                           <div className="flex items-center">
-                                            <Wallet
+                                            <CustomWalletMenuIcon
                                               size={16}
                                               className={`mr-2.5 ${selectedWalletName === wallet.name ? "text-emerald-500" : "text-slate-400"}`}
                                             />
@@ -5525,51 +5579,7 @@ const DuesManager: React.FC<DuesManagerProps> = ({
               className="p-2 border border-slate-200/80 bg-white text-slate-700 hover:bg-slate-100 rounded-xl transition-all flex items-center justify-center cursor-pointer"
               title="রিপোর্ট ডাউনলোড"
             >
-              <svg
-                viewBox="0 0 32 32"
-                width={23}
-                height={23}
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g clipPath="url(#pdf-spec-clip-expenses)">
-                  {/* Document Body (Light Gray) */}
-                  <path d="M4 2H20L28 10V30H4V2Z" fill="#E2E8F0" />
-                  
-                  {/* Red Bottom Banner */}
-                  <rect x="4" y="20" width="24" height="10" fill="#E14E3A" />
-                  
-                  {/* PDF Text */}
-                  <text
-                    x="16"
-                    y="27.5"
-                    fill="#FFFFFF"
-                    fontSize="7.5"
-                    fontWeight="900"
-                    fontFamily="Inter, system-ui, sans-serif"
-                    textAnchor="middle"
-                    letterSpacing="0.2"
-                  >
-                    PDF
-                  </text>
-                </g>
-                
-                {/* Fold flap */}
-                <path d="M20 2L20 10L28 10Z" fill="#CBD5E1" />
-                <path d="M20 10L28 10L20 14Z" fill="rgba(0,0,0,0.08)" />
-                
-                {/* Arrow Shadow */}
-                <path d="M14.5 6.5H17.5V12.5H20.5L16 17.5L11.5 12.5H14.5V6.5Z" fill="rgba(0,0,0,0.12)" />
-                
-                {/* Red Arrow */}
-                <path d="M14 6H18V12H21L16 17L11 12H14V6Z" fill="#E14E3A" />
-
-                <defs>
-                  <clipPath id="pdf-spec-clip-expenses">
-                    <path d="M4 5C4 3.34315 5.34315 2 7 2H20L28 10V27C28 28.6569 26.6569 30 25 30H7C5.34315 30 4 28.6569 4 27V5Z" />
-                  </clipPath>
-                </defs>
-              </svg>
+              <CustomPdfDownloadIcon size={22} className="text-[#1C274C]" />
             </button>
           </div>
         </div>
@@ -6060,7 +6070,7 @@ const DuesManager: React.FC<DuesManagerProps> = ({
                           className="w-full flex items-center justify-between py-3.5 pl-4 pr-3.5 bg-[#fcfdfd] border border-slate-200 hover:border-slate-300 rounded-[12px] transition-colors shadow-sm"
                         >
                           <div className="flex items-center gap-3">
-                            <Wallet
+                            <CustomWalletMenuIcon
                               size={20}
                               className="text-slate-500 pt-[1px]"
                               strokeWidth={1.5}
@@ -6105,7 +6115,7 @@ const DuesManager: React.FC<DuesManagerProps> = ({
                                   }`}
                                 >
                                   <div className="flex items-center gap-3">
-                                    <Wallet
+                                    <CustomWalletMenuIcon
                                       size={18}
                                       className={
                                         txWalletName === wallet.name
